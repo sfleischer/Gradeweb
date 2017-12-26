@@ -1,0 +1,19 @@
+{
+  "name": "gradeweb",
+  "version": "1.0.0",
+  "description": "Gradebook for the web",
+  "main": "node app.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sfleischer/Gradeweb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sfleischer/Gradeweb/issues"
+  },
+  "homepage": "https://github.com/sfleischer/Gradeweb#readme"
+}
