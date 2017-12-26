@@ -1,0 +1,77 @@
+<h1> Gradeweb </h1>
+
+<canvas id="myChart" width="400" height="400"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});</script>
+
+<table style="width:200px">
+<tr>
+    <th>Label</th>
+    <th>Field</th> 
+ </tr>
+<tr>
+	<td><label>STD</label></td>
+	<td><input type="text" name="STD"></td>
+</tr>
+<tr>
+	<td><label>Median</label></td> 
+	<td><input type="text" name="Median"></td> 
+</tr>
+<tr>
+	<td><label>Mean</label></td>
+	<td><input type="text" name="Mean"><br/></td>
+</tr>
+<tr>
+	<td><label>Min</label></td>
+	<td><input type="text" name="Min"><br/></td>
+</tr>
+<tr>
+	<td><label>Max</label></td>
+	<td><input type="text" name="Max"><br/></td>
+</tr>
+<tr>
+	<td><label>People</label></td>
+	<td><input type="text" name="People"><br/></td>
+</tr>
+<tr>
+	<td><label style="overflow: hidden; white-space: nowrap;">Personal Score</label></td>
+	<td><input type="text" name="Personal Score"><br/></td>
+</tr>
+</table>
