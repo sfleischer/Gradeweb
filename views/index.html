@@ -1,13 +1,94 @@
+<style>
+body {
+    background-color: rgb(245,245,245);
+}
+
+.container {
+    width: 100%;
+    margin: auto;
+    padding: 10px;
+}
+.left {
+    width: 70%;
+    float: left;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+}
+.right {
+    margin-right: 10px;
+}
+
+.table {
+    border-width: 1px;
+    border-color: red;
+    border-style: solid;
+}
+
+.textfield {
+    height: 28px;
+    width: 150px;
+    font-size: 12px;
+}
+
+.results {
+    display: inline-block;
+    height: 28px;
+    width: 150px;
+    text-align: center;
+    vertical-align: center;
+
+    border-width: 1px;
+    border-color: blue;
+    border-style: solid;
+}
+
+.label {
+    padding-left: 1em;
+    padding-right: 1.8em;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.bold{
+    text-align: center;
+    padding-left: auto;
+    padding-right: auto;
+}
+
+.radio-left{
+    text-align: center;
+    padding-left: 10%
+}
+
+.radio-right{
+    text-align: center;
+    padding-right: 20%
+}
+
+.radio-table {
+    width: 100%;
+}
+
+.btn{
+    width:100%;
+    font-size: 12px;
+}
+</style>
+
 <h1> Gradeweb </h1>
 
-<canvas id="myChart" width="400" height="400"></canvas>
+<section class="container">
+
+<div class="left">
+<canvas id="myChart" style="background-color: white"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script>
 var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Heyra"],
         datasets: [{
             label: '# of Votes',
             data: [12, 19, 3, 5, 2, 3],
@@ -37,41 +118,121 @@ var myChart = new Chart(ctx, {
                     beginAtZero:true
                 }
             }]
-        }
+        }, 
+        responsive: true
     }
 });</script>
 
-<table style="width:200px">
+</div>
+
+<div class="right">
+
+
+
+<table class="table">
 <tr>
-    <th>Label</th>
-    <th>Field</th> 
+    <th></th>
+    <th></th> 
  </tr>
 <tr>
-	<td><label>STD</label></td>
-	<td><input type="text" name="STD"></td>
+    <td colspan="2" class="bold"><b>Statistics:</b></td>
 </tr>
 <tr>
-	<td><label>Median</label></td> 
-	<td><input type="text" name="Median"></td> 
+	<td><label class="label">STD</label></td>
+	<td><input type="text" name="STD" class="textfield"></td>
 </tr>
 <tr>
-	<td><label>Mean</label></td>
-	<td><input type="text" name="Mean"><br/></td>
+	<td><label class="label">Median</label></td> 
+	<td><input type="text" name="Median" class="textfield"></td> 
 </tr>
 <tr>
-	<td><label>Min</label></td>
-	<td><input type="text" name="Min"><br/></td>
+	<td><label class="label">Mean</label></td>
+	<td><input type="text" name="Mean" class="textfield"><br/></td>
 </tr>
 <tr>
-	<td><label>Max</label></td>
-	<td><input type="text" name="Max"><br/></td>
+	<td><label class="label">Min</label></td>
+	<td><input type="text" name="Min" class="textfield"><br/></td>
 </tr>
 <tr>
-	<td><label>People</label></td>
-	<td><input type="text" name="People"><br/></td>
+	<td><label class="label">Max</label></td>
+	<td><input type="text" name="Max" class="textfield"><br/></td>
 </tr>
 <tr>
-	<td><label style="overflow: hidden; white-space: nowrap;">Personal Score</label></td>
-	<td><input type="text" name="Personal Score"><br/></td>
+	<td><label class="label">People</label></td>
+	<td><input type="text" name="People" class="textfield"><br/></td>
+</tr>
+<tr>
+	<td><label class="label">Personal Score</label></td>
+	<td><input type="text" name="Personal Score" class="textfield"><br/></td>
+</tr>
+
+<tr>  
+    <td colspan="2" class="bold"><b>Results:</b></td>
+</tr>
+<tr>
+    <td><label class="label">Graph STD</label></td>
+    <td><span class="results" id="Graph STD">yo</span>
+<tr>
+<tr>
+    <td><label class="label">Graph mean</label></td>
+    <td><span class="results" id="Graph mean"></span>
+<tr>
+<tr>
+    <td><label class="label">Graph median</label></td>
+    <td><span class="results" id="Graph median"></span>
+<tr>
+<tr>
+    <td><label class="label">Percentile</label></td>
+    <td><span class="results" id="Percentile"></span>
+<tr>
+    <td colspan="2" class="bold"><b>Metrics:</b></td>
+</tr>
+
+
+<tr>
+    <td><label class="label">X spacing</label></td>
+    <td><input type="text" name="X spacing" class="textfield"></td>
+</tr>
+<tr>
+    <td><label class="label">#y ticks</label></td> 
+    <td><input type="text" name="y ticks" class="textfield"></td> 
+</tr>
+
+<tr>
+    <td colspan="2">
+        <table class="radio-table">
+            <tr>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <td class="radio-left"><input type="radio" name="spacing" id="absolute"><label for="absolute">Absolute</label></td>
+                <td class="radio-right"><input type="radio" name="spacing" id="relative"><label for="relative">Relative</label></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <table class="radio-table">
+            <tr>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <td><button class="btn">Generate</button></td>
+                <td><button class="btn">Display Fitness</button></td>
+            </tr>
+            <tr>
+                <td><button class="btn">Update Graph</button></td>
+                <td><button class="btn">Clear</button></td>
+            </tr>
+        </table>
+    </td>
 </tr>
 </table>
+
+</div>
+
+</section>
