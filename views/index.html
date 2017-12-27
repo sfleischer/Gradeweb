@@ -33,11 +33,11 @@ body {
 }
 
 .results {
-    display: inline-block;
+    display: table-cell;
     height: 28px;
     width: 150px;
     text-align: center;
-    vertical-align: center;
+    vertical-align: middle;
 
     border-width: 1px;
     border-color: blue;
@@ -82,47 +82,73 @@ body {
 <section class="container">
 
 <div class="left">
-<canvas id="myChart" style="background-color: white; height: 593px"></canvas>
+<!--<canvas id="myChart" style="background-color: white; height: 593px"></canvas>-->
+<div id="chart_div" style="width: 100%; height: 593px;"></div>
 <script>
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Heyra"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
+
+function createHistogram(datum){
+    google.charts.load("current", {packages:["corechart"]});
+    var drawChart = function(){
+        var data = google.visualization.arrayToDataTable(datum);
+
+        var options = {
+          title: 'Lengths of dinosaurs, in meters',
+          legend: { position: 'none' },
+          colors: ['green']
+        };
+
+        var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    };
+    google.charts.setOnLoadCallback(drawChart);
+};
+
+function createChart(){
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Heyra"],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
             }]
-        }, 
-        responsive: true,
-        maintainAspectRatio: false,
-    }
-});
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }, 
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+};
+
+
+
+//createChart();
+//createHistogram();
 
 $(document).ready(function(){
 
@@ -151,6 +177,12 @@ $(document).ready(function(){
                 $("#mean-graph").text(data.mean);
                 $("#median-graph").text(data.median);
                 $("#percentile-graph").text(data.personal);
+
+                for(var i = 0; i < data.data.length; i++){
+                    console.log(data.data[i]);
+                }
+
+                createHistogram(data.data);
             },
             error: function(err){
                 console.log("error");

@@ -22,18 +22,23 @@ router.post('/', function(req, res){
 
 	state = req.body;
 
-	//console.log('population', generateFirstPopulation(req.body.min, req.body.max, req.body.people, 50));
-	//var population = generateFirstPopulation(req.body.min, req.body.max, req.body.people, 50);
 	var dist = findDistribution();
 	dist.sort();
-	//printArr(dist);
+  
+    var data = Array(dist.length + 1);
+    data[0] = ["", ""];
+    for(var i = 1; i < data.length; i++){
+    	data[i] = [null, dist[i-1]];
+    }
+
 	results = {
 		std : standardDev(dist).toFixed(2),
-		median : dist[dist.length/2].toFixed(2),
+		median : dist[dist.length/2],
 		mean : average(dist).toFixed(2),
 		min : dist[0],
 		max : dist[dist.length-1],
-	    personal : search(dist, 0, dist.length-1, state.personal)
+	    personal : search(dist, 0, dist.length-1, state.personal),
+	    data : data
 	}
 	//console.log(JSON.stringify(results));
 	res.send(results);
@@ -125,15 +130,15 @@ function mutate(array){
 	for(var i = 0; i < array.length; i++){
 		var fate = Math.floor(Math.random() * 100);
 		if(fate < mutation*2){
-			array[i] = array[i] + Math.floor(2*Math.random() - 1);
+			array[i] = array[i] + Math.floor(2*Math.random() - 0.5);
 		} else if(fate < mutation * 3.5){
-			array[i] = array[i] + Math.floor(4*Math.random() - 2);
+			array[i] = array[i] + Math.floor(4*Math.random() - 1.5);
 		} else if(fate < mutation * 4.0){
-			array[i] = array[i] + Math.floor(6*Math.random() - 3);
+			array[i] = array[i] + Math.floor(6*Math.random() - 2.5);
 		} else if(fate < mutation * 4.5){
-			array[i] = array[i] + Math.floor(8*Math.random() - 4);
+			array[i] = array[i] + Math.floor(8*Math.random() - 3.5);
 		} else if(fate < mutation * 5.0){
-			array[i] = array[i] + Math.floor(10*Math.random() - 5);
+			array[i] = array[i] + Math.floor(10*Math.random() - 4.5);
 		}
 		if(array[i] < state.min){
 			array[i] = Math.floor(state.min);
