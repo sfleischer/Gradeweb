@@ -29,6 +29,7 @@ body {
     height: 28px;
     width: 150px;
     font-size: 12px;
+    text-align: center;
 }
 
 .results {
@@ -81,8 +82,7 @@ body {
 <section class="container">
 
 <div class="left">
-<canvas id="myChart" style="background-color: white"></canvas>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<canvas id="myChart" style="background-color: white; height: 593px"></canvas>
 <script>
 var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
@@ -119,9 +119,55 @@ var myChart = new Chart(ctx, {
                 }
             }]
         }, 
-        responsive: true
+        responsive: true,
+        maintainAspectRatio: false,
     }
-});</script>
+});
+
+$(document).ready(function(){
+
+    $("#generate-btn").click(function(){
+       // alert("you clicked generate");
+
+        var state = {
+            std: $("#std-txt").val(),
+            median: $("#median-txt").val(),
+            mean: $("#mean-txt").val(),
+            min: $("#min-txt").val(),
+            max: $("#max-txt").val(),
+            people: $("#people-txt").val(),
+            personal: $("#personal-txt").val()
+       };
+
+       $.ajax({
+            type: "POST",
+            url: "/",
+            data: JSON.stringify(state),
+            contentType: 'application/json',
+            cache: false,
+       });
+
+       console.log(JSON.stringify(state));
+       console.log($("#msg").text());
+    });
+
+    $("#fitness-btn").click(function(){
+        //alert("you clicked fitness");
+    });
+
+    $("#update-btn").click(function(){
+        //alert("you clicked update");
+    });
+
+    $("#clear-btn").click(function(){
+        //alert("you clicked clear");
+    });
+
+});
+
+
+
+</script>
 
 </div>
 
@@ -139,31 +185,31 @@ var myChart = new Chart(ctx, {
 </tr>
 <tr>
 	<td><label class="label">STD</label></td>
-	<td><input type="text" name="STD" class="textfield"></td>
+	<td><input type="text" name="STD" id="std-txt" class="textfield" value="10"></td>
 </tr>
 <tr>
 	<td><label class="label">Median</label></td> 
-	<td><input type="text" name="Median" class="textfield"></td> 
+	<td><input type="text" name="Median" id="median-txt" class="textfield" value="50"></td> 
 </tr>
 <tr>
 	<td><label class="label">Mean</label></td>
-	<td><input type="text" name="Mean" class="textfield"><br/></td>
+	<td><input type="text" name="Mean" id="mean-txt" class="textfield" value="50"><br/></td>
 </tr>
 <tr>
 	<td><label class="label">Min</label></td>
-	<td><input type="text" name="Min" class="textfield"><br/></td>
+	<td><input type="text" name="Min" id="min-txt" class="textfield" value="0"><br/></td>
 </tr>
 <tr>
 	<td><label class="label">Max</label></td>
-	<td><input type="text" name="Max" class="textfield"><br/></td>
+	<td><input type="text" name="Max" id="max-txt" class="textfield" value="100"><br/></td>
 </tr>
 <tr>
 	<td><label class="label">People</label></td>
-	<td><input type="text" name="People" class="textfield"><br/></td>
+	<td><input type="text" name="People" id="people-txt" class="textfield" value="100"><br/></td>
 </tr>
 <tr>
 	<td><label class="label">Personal Score</label></td>
-	<td><input type="text" name="Personal Score" class="textfield"><br/></td>
+	<td><input type="text" name="Personal Score" id="personal-txt" class="textfield" value="50"><br/></td>
 </tr>
 
 <tr>  
@@ -171,19 +217,19 @@ var myChart = new Chart(ctx, {
 </tr>
 <tr>
     <td><label class="label">Graph STD</label></td>
-    <td><span class="results" id="Graph STD">yo</span>
+    <td><span class="results" id="std-graph">yo</span>
 <tr>
 <tr>
     <td><label class="label">Graph mean</label></td>
-    <td><span class="results" id="Graph mean"></span>
+    <td><span class="results" id="mean-graph"></span>
 <tr>
 <tr>
     <td><label class="label">Graph median</label></td>
-    <td><span class="results" id="Graph median"></span>
+    <td><span class="results" id="median-graph"></span>
 <tr>
 <tr>
     <td><label class="label">Percentile</label></td>
-    <td><span class="results" id="Percentile"></span>
+    <td><span class="results" id="percentile-graph"></span>
 <tr>
     <td colspan="2" class="bold"><b>Metrics:</b></td>
 </tr>
@@ -191,11 +237,11 @@ var myChart = new Chart(ctx, {
 
 <tr>
     <td><label class="label">X spacing</label></td>
-    <td><input type="text" name="X spacing" class="textfield"></td>
+    <td><input type="text" name="X spacing" id="spacing-txt" class="textfield"></td>
 </tr>
 <tr>
     <td><label class="label">#y ticks</label></td> 
-    <td><input type="text" name="y ticks" class="textfield"></td> 
+    <td><input type="text" name="y ticks" id= "ticks-txt" class="textfield"></td> 
 </tr>
 
 <tr>
@@ -221,17 +267,19 @@ var myChart = new Chart(ctx, {
                 <th></th>
             </tr>
             <tr>
-                <td><button class="btn">Generate</button></td>
-                <td><button class="btn">Display Fitness</button></td>
+                <td><button class="btn" id="generate-btn">Generate</button></td>
+                <td><button class="btn" id="fitness-btn">Display Fitness</button></td>
             </tr>
             <tr>
-                <td><button class="btn">Update Graph</button></td>
-                <td><button class="btn">Clear</button></td>
+                <td><button class="btn" id="update-btn">Update Graph</button></td>
+                <td><button class="btn" id="clear-btn">Clear</button></td>
             </tr>
         </table>
     </td>
 </tr>
 </table>
+
+<span id="msg">{{msg}}</span> 
 
 </div>
 
