@@ -130,13 +130,13 @@ $(document).ready(function(){
        // alert("you clicked generate");
 
         var state = {
-            std: $("#std-txt").val(),
-            median: $("#median-txt").val(),
-            mean: $("#mean-txt").val(),
-            min: $("#min-txt").val(),
-            max: $("#max-txt").val(),
-            people: $("#people-txt").val(),
-            personal: $("#personal-txt").val()
+            std: parseFloat($("#std-txt").val()),
+            median: parseFloat($("#median-txt").val()),
+            mean: parseFloat($("#mean-txt").val()),
+            min: parseFloat($("#min-txt").val()),
+            max: parseFloat($("#max-txt").val()),
+            people: parseFloat($("#people-txt").val()),
+            personal: parseFloat($("#personal-txt").val())
        };
 
        $.ajax({
@@ -145,10 +145,19 @@ $(document).ready(function(){
             data: JSON.stringify(state),
             contentType: 'application/json',
             cache: false,
+            success: function(data){
+                //console.log("success");
+                $("#std-graph").text(data.std);
+                $("#mean-graph").text(data.mean);
+                $("#median-graph").text(data.median);
+                $("#percentile-graph").text(data.personal);
+            },
+            error: function(err){
+                console.log("error");
+            }
        });
 
-       console.log(JSON.stringify(state));
-       console.log($("#msg").text());
+       //console.log(JSON.stringify(state));
     });
 
     $("#fitness-btn").click(function(){
