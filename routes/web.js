@@ -87,6 +87,7 @@ function findTheFittest(population){
 	fittest.sort(function(a, b){ 
 		return a[0] < b[0] ? -1 : (a[0] == b[0] ? 0 : 1);
 	});
+	console.log(fittest[fittest.length-1]);
 	return fittest;
 };
 
@@ -94,7 +95,7 @@ function cull(fitness, population){
 	culled = new Array(fitness.length/2);
 	for(var i = 0; i < fitness.length/2; i++){
 		culled[i] = new Array(population[0].length);
-		culled[i] = population[fitness[i + fitness.length/2][1]];
+		culled[i] = population[fitness[i + Math.floor(fitness.length/2)][1]];
 	}
 	return culled;
 }
@@ -154,7 +155,7 @@ function getFitness(array){
 	array.sort();
 	fitness -= 2 * weights.std * Math.pow(state.std - standardDev(array), 2);
 	fitness -= weights.mean * Math.pow(state.mean - average(array), 2);
-	fitness -= weights.median * Math.pow(state.median - array[array.length/2], 2);
+	fitness -= weights.median * Math.pow(state.median - array[Math.floor(array.length/2)], 2);
 	fitness -= weights.min * Math.pow(state.min - array[0], 2);
 	fitness -= weights.max * Math.pow(state.max - array[array.length-1], 2);
 	return Math.floor(fitness);
