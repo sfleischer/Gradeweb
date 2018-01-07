@@ -33,7 +33,7 @@ router.post('/', function(req, res){
 
 	results = {
 		std : standardDev(dist).toFixed(2),
-		median : dist[dist.length/2],
+		median : dist[Math.floor(dist.length/2)],
 		mean : average(dist).toFixed(2),
 		min : dist[0],
 		max : dist[dist.length-1],
