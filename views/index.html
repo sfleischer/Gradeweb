@@ -12,10 +12,10 @@ body {
 
 .tab button {
     background-color: inherit;
-    border: 1px solid #ccc;
+    border: none;
     outline: none;
     cursor: pointer;
-    padding: 10px 20px;
+    padding: 10px 0px;
     transition: 0.3s;
     width: 100px;
     margin-top: 2px;
@@ -135,10 +135,14 @@ body {
     width: 100%;
 }
 
-.btn{
-    width:100%;
-    font-size: 12px;
+.stat {
+   display: table-row;
 }
+
+.settings {
+    display:none;
+}
+
 </style>
 
 <h1> Gradeweb </h1>
@@ -269,6 +273,20 @@ $(document).ready(function(){
         //alert("you clicked clear");
     });
 
+    $("#stat-tab").click(function(){
+        $(".stat").css({'display' : 'table-row'});
+        $(".settings").css({'display' : 'none'});
+        $("#stat-tab").css({'background-color' : '#ccc'});
+        $("#settings-tab").css({'background-color' : 'inherit'});
+    });
+
+    $("#settings-tab").click(function(){
+        $(".stat").css({'display' : 'none'});
+        $(".settings").css({'display' : 'table-row'});
+        $("#stat-tab").css({'background-color' : 'inherit'});
+        $("#settings-tab").css({'background-color' : '#ddd'});
+    });
+
 });
 
 
@@ -287,77 +305,79 @@ $(document).ready(function(){
  </tr>
 <tr>
     <td colspan ="2">
-    <div class="tab">
-        <button class="tablinks">Stats</button>
-        <button class="tablinks">Settings</button>
-    </div>
+        <div class="tab">
+            <button class="tablinks" id="stat-tab" style="background-color: #ccc">Stats</button>
+            <button class="tablinks" id="settings-tab">Settings</button>
+        </div>
     </td>
 </tr>
-<tr>
+
+<tr class="stat">
     <td colspan="2" class="bold"><b>Statistics:</b></td>
 </tr>
-<tr>
+<tr class="stat">
 	<td><label class="label">STD</label></td>
-	<td><input type="text" name="STD" id="std-txt" class="textfield" value="10"></td>
+	<td><input type="text" name="STD" id="std-txt" class="textfield" value="18"></td>
 </tr>
-<tr>
+<tr class="stat">
 	<td><label class="label">Median</label></td> 
 	<td><input type="text" name="Median" id="median-txt" class="textfield" value="50"></td> 
 </tr>
-<tr>
+<tr class="stat">
 	<td><label class="label">Mean</label></td>
 	<td><input type="text" name="Mean" id="mean-txt" class="textfield" value="50"><br/></td>
 </tr>
-<tr>
+<tr class="stat">
 	<td><label class="label">Min</label></td>
 	<td><input type="text" name="Min" id="min-txt" class="textfield" value="0"><br/></td>
 </tr>
-<tr>
+<tr class="stat">
 	<td><label class="label">Max</label></td>
 	<td><input type="text" name="Max" id="max-txt" class="textfield" value="100"><br/></td>
 </tr>
-<tr>
+<tr class="stat">
 	<td><label class="label">People</label></td>
 	<td><input type="text" name="People" id="people-txt" class="textfield" value="100"><br/></td>
 </tr>
-<tr>
+<tr class="stat">
 	<td><label class="label">Personal Score</label></td>
 	<td><input type="text" name="Personal Score" id="personal-txt" class="textfield" value="50"><br/></td>
 </tr>
 
-<tr>  
+<tr class="stat">  
     <td colspan="2" class="bold"><b>Results:</b></td>
 </tr>
-<tr>
+<tr class="stat">
     <td><label class="label">Graph STD</label></td>
     <td><span class="results" id="std-graph">yo</span>
-<tr>
-<tr>
+</tr>
+<tr class="stat">
     <td><label class="label">Graph mean</label></td>
     <td><span class="results" id="mean-graph"></span>
-<tr>
-<tr>
+</tr>
+<tr class="stat">
     <td><label class="label">Graph median</label></td>
     <td><span class="results" id="median-graph"></span>
-<tr>
-<tr>
+</tr>
+<tr class="stat">
     <td><label class="label">Percentile</label></td>
     <td><span class="results" id="percentile-graph"></span>
-<tr>
+</tr>
+<tr class="stat">
     <td colspan="2" class="bold"><b>Metrics:</b></td>
 </tr>
 
 
-<tr>
+<tr class="stat">
     <td><label class="label">X spacing</label></td>
     <td><input type="text" name="X spacing" id="spacing-txt" class="textfield"></td>
 </tr>
-<tr>
+<tr class="stat">
     <td><label class="label">#y ticks</label></td> 
     <td><input type="text" name="y ticks" id= "ticks-txt" class="textfield"></td> 
 </tr>
 
-<tr>
+<tr class="stat">
     <td colspan="2">
         <table class="radio-table">
             <tr>
@@ -372,7 +392,7 @@ $(document).ready(function(){
     </td>
 </tr>
 
-<tr>
+<tr class="stat">
     <td colspan="2">
         <div class="active">
             <button id="generate-btn">Generate</button>
@@ -381,7 +401,7 @@ $(document).ready(function(){
     </td>
 </tr>
 
-<tr>
+<tr class="stat">
     <td colspan="2">
         <div class="active">
             <button id="update-btn">Update Graph</button>
@@ -390,22 +410,44 @@ $(document).ready(function(){
     </td>
 </tr>
 
-<tr>
-    <td colspan="2">
-        <table class="radio-table">
-            <tr>
-                <th></th>
-                <th></th>
-            </tr>
-            
-            
-        </table>
-    </td>
+<!-- end of stats page -->
+
+<!-- settings page -->
+
+<tr class="settings">
+    <td colspan="2" class="bold"><b>Settings:</b></td>
 </tr>
+
+<tr class="settings">
+    <td><label class="label">Generations</label></td>
+    <td><input type="text" name="generation" id="generation-txt" class="textfield" value="300"></td>
+</tr>
+
+<tr class="settings">
+    <td><label class="label">Threshold</label></td>
+    <td><input type="text" name="threshold" id="threshold-txt" class="textfield" value="1000"></td>
+</tr>
+
+<tr class="settings">
+    <td><label class="label">Population</label></td>
+    <td><input type="text" name="population" id="population-txt" class="textfield" value="300"></td>
+</tr>
+
+<tr class="settings" style="visibility: hidden">
+    <td><label class="label">Personal Score</label></td>
+    <td><input type="text" name="hidden" id="hideen-txt" class="textfield" value="300"></td>
+</tr>
+
+<!-- end of settings -->
+
 </table>
 
 <span id="msg">{{msg}}</span> 
 
+
+
 </div>
+
+
 
 </section>

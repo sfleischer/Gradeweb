@@ -87,7 +87,6 @@ function findTheFittest(population){
 	fittest.sort(function(a, b){ 
 		return a[0] < b[0] ? -1 : (a[0] == b[0] ? 0 : 1);
 	});
-	console.log(fittest[fittest.length-1]);
 	return fittest;
 };
 
