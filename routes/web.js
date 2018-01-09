@@ -11,6 +11,8 @@ const weights = {
 	max: 0.5
 }
 var state;
+var fitchart;
+var weakchart;
 
 router.get('/', function(req, res){
 	
@@ -18,19 +20,31 @@ router.get('/', function(req, res){
 });
 
 router.post('/', function(req, res){
-	var dakine = {'msg': "hi"};
 
+	//setting up environmint
 	state = req.body;
+	fitchart = new Array(generations);
+	weakchart = new Array(generations);
 
+	//find the distribution
 	var dist = findDistribution();
 	dist.sort();
   
-    var data = Array(dist.length + 1);
+  	//format the distribution for export
+    var data = new Array(dist.length + 1);
     data[0] = ["", ""];
     for(var i = 1; i < data.length; i++){
     	data[i] = [null, dist[i-1]];
     }
 
+    var fitexport = new Array(generations + 1);
+    fitexport[0] = ['Generations', 'Fittest', 'Weakest'];
+    for(var i = 0; i < generations; i++){
+    	fitexport[i+1] = [i.toString(), fitchart[i], weakchart[i]];
+    }
+    //printArr(fitchart);
+
+    //export
 	results = {
 		std : standardDev(dist).toFixed(2),
 		median : dist[Math.floor(dist.length/2)],
@@ -38,9 +52,9 @@ router.post('/', function(req, res){
 		min : dist[0],
 		max : dist[dist.length-1],
 	    personal : search(dist, 0, dist.length-1, state.personal),
-	    data : data
+	    data : data,
+	    fitexport : fitexport
 	}
-	//console.log(JSON.stringify(results));
 	res.send(results);
 });
 
@@ -58,8 +72,10 @@ function findDistribution(){
 		let fittest = findTheFittest(population);
 		let culled = cull(fittest, population);
 		population = createNextPopulation(culled);
+		fitchart[i] = fittest[fittest.length-1][0];
+		weakchart[i] = fittest[0][0];
 		i++;
-	} while(i < generations-1);
+	} while((i < generations-1) && (fitchart[i-1] < threshold));
 	let fittest = findTheFittest(population);
 	return population[fittest[fittest.length-1][1]];
 }

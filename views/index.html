@@ -143,6 +143,36 @@ body {
     display:none;
 }
 
+input[type="range"]{
+    -webkit-appearance: none;
+    -moz-apperance: none;
+    border-radius: 6px;
+    height: 6px;
+    outline: none;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(0.15, blue),
+        color-stop(0.15, #C5C5C5)
+    );
+}
+
+#coloredSlider {
+    float: left;
+    clear: left;
+    width: 100%;
+    margin: 15px;
+}
+#coloredSlider .ui-slider-range { 
+    background: red; 
+}
+
+#coloredSlider .ui-state-default, .ui-widget-content .ui-state-default {
+    background: none;
+    background-color: #FFF;
+}
+
 </style>
 
 <h1> Gradeweb </h1>
@@ -154,13 +184,18 @@ body {
 <div id="chart_div" style="width: 100%; height: 593px;"></div>
 <script>
 
+google.charts.load("current", {packages:["corechart"]});
+
+var drawHistogram;
+var drawFitness;
+
 var createHistogram = function(datum){
-    google.charts.load("current", {packages:["corechart"]});
-    var drawChart = function(){
+    
+    drawHistogram = function(){
         var data = google.visualization.arrayToDataTable(datum);
 
         var options = {
-          title: 'Lengths of dinosaurs, in meters',
+          title: 'Sample Distribution',
           legend: { position: 'none' },
           colors: ['green']
         };
@@ -168,51 +203,22 @@ var createHistogram = function(datum){
         var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
         chart.draw(data, options);
     };
-    google.charts.setOnLoadCallback(drawChart);
 };
 
-var createChart = function(){
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Heyra"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }, 
-            responsive: true,
-            maintainAspectRatio: false,
-        }
-    });
-};
+var createFitness = function(fitexport){
 
+    drawFitness = function(){
+        var data = google.visualization.arrayToDataTable(fitexport);
+
+        var options = {
+          title: 'Fitness',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    };
+}
 
 
 var updateHistogram = function(){
@@ -226,7 +232,7 @@ var updateHistogram = function(){
             personal: parseFloat($("#personal-txt").val())
        };
 
-   $.ajax({
+    $.ajax({
         type: "POST",
         url: "/",
         data: JSON.stringify(state),
@@ -248,6 +254,8 @@ var updateHistogram = function(){
             }
 
             createHistogram(data.data);
+            createFitness(data.fitexport);
+            google.charts.setOnLoadCallback(drawHistogram);
         },
         error: function(err){
             console.log("error");
@@ -262,11 +270,11 @@ $(document).ready(function(){
     $("#generate-btn").click(updateHistogram);
 
     $("#fitness-btn").click(function(){
-        //alert("you clicked fitness");
+        google.charts.setOnLoadCallback(drawFitness);
     });
 
     $("#update-btn").click(function(){
-        //alert("you clicked update");
+        google.charts.setOnLoadCallback(drawHistogram);
     });
 
     $("#clear-btn").click(function(){
@@ -274,17 +282,51 @@ $(document).ready(function(){
     });
 
     $("#stat-tab").click(function(){
-        $(".stat").css({'display' : 'table-row'});
-        $(".settings").css({'display' : 'none'});
+        $(".stat").show();
+        $(".settings").hide();
         $("#stat-tab").css({'background-color' : '#ccc'});
         $("#settings-tab").css({'background-color' : 'inherit'});
     });
 
     $("#settings-tab").click(function(){
-        $(".stat").css({'display' : 'none'});
-        $(".settings").css({'display' : 'table-row'});
+        $(".stat").hide();
+        $(".settings").show();
         $("#stat-tab").css({'background-color' : 'inherit'});
         $("#settings-tab").css({'background-color' : '#ddd'});
+    });
+
+    var updateSlider = function(){
+        var val = ($(this).val() - $(this).attr('min')) / ($(this).attr('max') - $(this).attr('min'));
+        
+        $(this).css('background-image',
+                    '-webkit-gradient(linear, left top, right top, '
+                    + 'color-stop(' + val + ', blue), '
+                    + 'color-stop(' + val + ', #C5C5C5)'
+                    + ')'
+                    );
+    };
+
+    $('input[type="range"]').change(updateSlider);
+
+    var refreshSwatch = function() {
+        var coloredSlider = $( "#coloredSlider" ).slider( "value" );
+        var myColor = blue;
+
+        $( "#coloredSlider .ui-slider-range" ).css( "background-color", myColor );
+
+        $( "#coloredSlider .ui-state-default, .ui-widget-content .ui-state-default" ).css( "background-color", myColor );
+    }
+
+    $(function(){
+        $( "#coloredSlider" ).slider({
+            orientation: "horizontal",
+            range: "min",
+            max: 100,
+            value: 0,
+            slide: refreshSwatch,
+            change: refreshSwatch
+        });
+        console.log("hey");
     });
 
 });
@@ -431,6 +473,20 @@ $(document).ready(function(){
 <tr class="settings">
     <td><label class="label">Population</label></td>
     <td><input type="text" name="population" id="population-txt" class="textfield" value="300"></td>
+</tr>
+
+<tr class="settings">
+    <td colspan="2" class="bold"><b>Weights:</b></td>
+</tr>
+
+<tr class="settings">
+    <td><label class="label">STD Weight</label></td>
+    <td><input type="range" min="0" max="5" step="0.1" value="2"></td>
+</tr>
+
+<tr class="settings">
+    <td><label class="label">Median Weight</label></td>
+    <td><div id="coloredSlider"></div></td>
 </tr>
 
 <tr class="settings" style="visibility: hidden">
